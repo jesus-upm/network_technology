@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Network and Transport Layers - Group YOUR_GROUP_ID</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <h1>Network and Transport Layers</h1>
+      <p>Laboratory assignment 3 &middot; Group ID: YOUR_GROUP_ID</p>
+    </header>
+
+    <div class="report-section">
+      <h2>1. Theoretical part</h2>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.1</span>Transport layer and ports</h3>
+        <p>The transport layer provides communication between <em>processes</em> on different hosts, while the network
+          layer (IP) only delivers packets between <em>hosts</em>. The two main transport protocols of the TCP/IP stack
+          are TCP and UDP.</p>
+        <p>A <strong>port</strong> is a 16-bit number (0&ndash;65535) that identifies an application or service on a
+          host. A connection is identified by the <strong>socket pair</strong>: source IP + source port + destination IP
+          + destination port (+ protocol). Port ranges (IANA):</p>
+        <table>
+          <tr>
+            <th>Range</th>
+            <th>Name</th>
+            <th>Use</th>
+          </tr>
+          <tr>
+            <td>0&ndash;1023</td>
+            <td>Well-known (system) ports</td>
+            <td>Standard services: 21 FTP, 22 SSH/SCP/SFTP, 53 DNS, 80 HTTP, 443 HTTPS</td>
+          </tr>
+          <tr>
+            <td>1024&ndash;49151</td>
+            <td>Registered ports</td>
+            <td>Applications registered with IANA</td>
+          </tr>
+          <tr>
+            <td>49152&ndash;65535</td>
+            <td>Dynamic (ephemeral) ports</td>
+            <td>Chosen by the OS for the client side of a connection</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.2</span>TCP protocol</h3>
+        <p>The Transmission Control Protocol (RFC 9293) is <strong>connection-oriented</strong> and
+          <strong>reliable</strong>. It delivers a byte stream in order and without duplicates, using sequence numbers,
+          acknowledgements, retransmission of lost data, flow control (receiver window) and congestion control. It is
+          used where correctness matters more than minimal delay: web (HTTP/HTTPS), e-mail, FTP, SSH.
+        </p>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.3</span>UDP protocol</h3>
+        <p>The User Datagram Protocol (RFC 768) is <strong>connectionless</strong> and <strong>unreliable</strong> (best
+          effort). Every datagram is sent independently: no handshake, no acknowledgements, no retransmission, no
+          ordering, no congestion control. In exchange it has very low overhead and latency. It is used for DNS queries,
+          DHCP, VoIP, video streaming, online games and QUIC.</p>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.4</span>TCP protocol parameters (header fields)</h3>
+        <p>The TCP header is 20 bytes long, up to 60 bytes with options.</p>
+        <table>
+          <tr>
+            <th>Field</th>
+            <th>Size</th>
+            <th>Meaning</th>
+          </tr>
+          <tr>
+            <td>Source port</td>
+            <td>16 bits</td>
+            <td>Port of the sending process</td>
+          </tr>
+          <tr>
+            <td>Destination port</td>
+            <td>16 bits</td>
+            <td>Port of the receiving process</td>
+          </tr>
+          <tr>
+            <td>Sequence number</td>
+            <td>32 bits</td>
+            <td>Number of the first data byte in the segment (or the initial sequence number in a SYN)</td>
+          </tr>
+          <tr>
+            <td>Acknowledgement number</td>
+            <td>32 bits</td>
+            <td>Next sequence number the sender expects to receive (valid when ACK is set)</td>
+          </tr>
+          <tr>
+            <td>Data offset</td>
+            <td>4 bits</td>
+            <td>Header length in 32-bit words</td>
+          </tr>
+          <tr>
+            <td>Flags</td>
+            <td>8 bits</td>
+            <td>CWR, ECE, URG, ACK, PSH, RST, SYN, FIN</td>
+          </tr>
+          <tr>
+            <td>Window size</td>
+            <td>16 bits</td>
+            <td>Number of bytes the receiver is willing to accept (flow control)</td>
+          </tr>
+          <tr>
+            <td>Checksum</td>
+            <td>16 bits</td>
+            <td>Error detection over header, data and pseudo-header</td>
+          </tr>
+          <tr>
+            <td>Urgent pointer</td>
+            <td>16 bits</td>
+            <td>Offset of urgent data (valid when URG is set)</td>
+          </tr>
+          <tr>
+            <td>Options</td>
+            <td>0&ndash;320 bits</td>
+            <td>For example MSS, window scale, SACK permitted, timestamps</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.5</span>UDP protocol parameters (header fields)</h3>
+        <p>The UDP header is only 8 bytes long.</p>
+        <table>
+          <tr>
+            <th>Field</th>
+            <th>Size</th>
+            <th>Meaning</th>
+          </tr>
+          <tr>
+            <td>Source port</td>
+            <td>16 bits</td>
+            <td>Port of the sender (optional, may be 0)</td>
+          </tr>
+          <tr>
+            <td>Destination port</td>
+            <td>16 bits</td>
+            <td>Port of the receiver</td>
+          </tr>
+          <tr>
+            <td>Length</td>
+            <td>16 bits</td>
+            <td>Length of header + data in bytes</td>
+          </tr>
+          <tr>
+            <td>Checksum</td>
+            <td>16 bits</td>
+            <td>Error detection (optional in IPv4, mandatory in IPv6)</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.6</span>Comparison of TCP and UDP</h3>
+        <table>
+          <tr>
+            <th>Feature</th>
+            <th>TCP</th>
+            <th>UDP</th>
+          </tr>
+          <tr>
+            <td>Connection</td>
+            <td>Connection-oriented</td>
+            <td>Connectionless</td>
+          </tr>
+          <tr>
+            <td>Reliability</td>
+            <td>Acknowledgements, retransmissions</td>
+            <td>None</td>
+          </tr>
+          <tr>
+            <td>Ordering</td>
+            <td>Guaranteed</td>
+            <td>Not guaranteed</td>
+          </tr>
+          <tr>
+            <td>Flow / congestion control</td>
+            <td>Yes</td>
+            <td>No</td>
+          </tr>
+          <tr>
+            <td>Data unit</td>
+            <td>Byte stream (segments)</td>
+            <td>Datagrams with preserved boundaries</td>
+          </tr>
+          <tr>
+            <td>Header size</td>
+            <td>20&ndash;60 bytes</td>
+            <td>8 bytes</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.7</span>TCP connection</h3>
+        <p>A TCP connection is a full-duplex, logical channel between two sockets. It has three phases: establishment,
+          data transfer and release. During its life each side goes through states such as LISTEN, SYN_SENT,
+          SYN_RECEIVED, ESTABLISHED, FIN_WAIT_1/2, CLOSE_WAIT, LAST_ACK, TIME_WAIT and CLOSED. These states are what
+          <code>netstat</code> shows in the practical part.
+        </p>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.8</span>Connection establishment: three-way handshake</h3>
+        <ul>
+          <li><strong>SYN:</strong> the client sends a segment with SYN set and its initial sequence number
+            (ISN<sub>c</sub>).</li>
+          <li><strong>SYN-ACK:</strong> the server answers with SYN and ACK set, its own initial sequence number
+            (ISN<sub>s</sub>) and acknowledgement number ISN<sub>c</sub>+1.</li>
+          <li><strong>ACK:</strong> the client confirms with ACK set and acknowledgement number ISN<sub>s</sub>+1. The
+            connection is now ESTABLISHED on both sides.</li>
+        </ul>
+        <p>Three messages are needed so that both sides agree on each other's initial sequence numbers and confirm that
+          the other side can send and receive.</p>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">1.9</span>Connection release</h3>
+        <p>The normal release is a <strong>four-way handshake</strong>, because each direction is closed independently:
+        </p>
+        <ul>
+          <li>Side A sends <strong>FIN</strong> (it has no more data to send) and enters FIN_WAIT_1.</li>
+          <li>Side B sends <strong>ACK</strong>; A enters FIN_WAIT_2, B enters CLOSE_WAIT.</li>
+          <li>When B has finished sending, it sends its own <strong>FIN</strong> (LAST_ACK).</li>
+          <li>A sends the final <strong>ACK</strong> and waits in <strong>TIME_WAIT</strong> (2&times;MSL, typically
+            30&ndash;120 s) so that late segments expire and a lost final ACK can be retransmitted. Then the connection
+            is CLOSED.</li>
+        </ul>
+        <p>A connection can also be aborted immediately with a <strong>RST</strong> segment.</p>
+      </div>
+    </div>
+
+    <div class="report-section">
+      <h2>2. Practical part</h2>
+
+      <div class="topic-block">
+        <h3><span class="badge">2.1.1</span>Web browsing (www.google.com)</h3>
+        <p><strong>Method.</strong> Open <code>www.google.com</code>. In a terminal run <code>netstat -ano</code>
+          (Windows) or <code>netstat -tunap</code> (Linux). In Wireshark use the filter <code>tcp.port == 443</code> (or
+          <code>quic</code> for UDP 443 if your browser uses HTTP/3). Then close the browser and run netstat again.
+        </p>
+        <p><strong>Expected result.</strong> Remote port <strong>443</strong> (HTTPS, TCP); local port is ephemeral.
+          After closing, entries move to TIME_WAIT and then disappear.</p>
+        <div class="todo">
+          Replace with your own results: local port ____, remote port ____, state after closing ____
+          <!-- <img class="img-standard" src="images/2-1-1-netstat.png" alt="netstat output"> -->
+          <!-- <img class="img-standard" src="images/2-1-1-wireshark.png" alt="Wireshark capture"> -->
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">2.1.2</span>FTP file transfer</h3>
+        <p><strong>Method.</strong> Connect with an FTP client (for example <code>ftp studife.it.p.lodz.pl</code>),
+          upload a file with <code>put</code>, then <code>quit</code>. Wireshark filter: <code>ftp || ftp-data</code> or
+          <code>tcp.port == 21</code>. Check netstat before, during and after.
+        </p>
+        <p><strong>Expected result.</strong> Control connection: remote port <strong>21</strong>. Data connection: in
+          passive mode the client connects to a high server port announced in the reply to <code>PASV</code>; in active
+          mode the server connects from port 20 to a port given by <code>PORT</code>. FTP sends credentials and data in
+          plain text, visible in Wireshark.</p>
+        <div class="todo">
+          Replace with your own results: control local ____ / remote ____, data local ____ / remote ____, mode active /
+          passive
+          <!-- <img class="img-standard" src="images/2-1-2-ftp.png" alt="FTP session"> -->
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">2.1.3</span>SCP / SFTP file transfer</h3>
+        <p><strong>Method.</strong> Run for example <code>scp file.txt your_team_name@studife.it.p.lodz.pl:</code> or
+          <code>sftp your_team_name@studife.it.p.lodz.pl</code>. Wireshark filter: <code>tcp.port == 22</code> (or
+          <code>ssh</code>). Check netstat during and after.
+        </p>
+        <p><strong>Expected result.</strong> One TCP connection to remote port <strong>22</strong> (SSH) with an
+          ephemeral local port. Control and data travel through the same encrypted channel, so, unlike FTP, no content
+          is readable in Wireshark.</p>
+        <div class="todo">
+          Replace with your own results: local port ____, remote port ____, state after closing ____
+          <!-- <img class="img-standard" src="images/2-1-3-scp.png" alt="SCP transfer"> -->
+        </div>
+      </div>
+
+      <div class="topic-block">
+        <h3><span class="badge">2.1.4</span>DNS transport protocol and port</h3>
+        <p><strong>Method.</strong> Start Wireshark with the filter <code>dns</code>, then run
+          <code>nslookup www.google.com</code> (flush the cache first, for example <code>ipconfig /flushdns</code> on
+          Windows). Inspect the UDP header of the query and the response.
+        </p>
+        <p><strong>Expected result.</strong> DNS uses <strong>UDP port 53</strong> on the server (the query's source
+          port is ephemeral, and the response comes from port 53). TCP port 53 is used when a response is too large (TC
+          bit set), for zone transfers, and in some secure DNS setups.</p>
+        <div class="todo">
+          Replace with your own results: protocol ____, client port ____, server port ____
+          <!-- <img class="img-standard" src="images/2-1-4-dns.png" alt="DNS in Wireshark"> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

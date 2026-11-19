@@ -1,0 +1,142 @@
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #e74c3c;
+    --bg-color: #ecf0f1;
+    --text-color: #34495e;
+    --card-bg: #ffffff;
+    --border-color: #bdc3c7;
+}
+
+body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: #ffffff;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.report-section {
+    background-color: var(--card-bg);
+    padding: 30px;
+    margin-bottom: 20px;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: var(--primary-color);
+    border-bottom: 3px solid var(--secondary-color);
+    padding-bottom: 10px;
+    margin-top: 0;
+}
+
+.topic-block {
+    background: #f9fbfd;
+    border: 1px solid var(--border-color);
+    border-left: 5px solid var(--primary-color);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.topic-block:hover {
+    transform: translateX(5px);
+    border-left: 5px solid var(--secondary-color);
+}
+
+h3 {
+    margin-top: 0;
+    color: var(--primary-color);
+    font-size: 18px;
+}
+
+h4 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.badge {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+code {
+    background-color: #dfe6e9;
+    color: #d35400;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+ul {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 8px;
+}
+
+.img-standard {
+    max-width: 100%;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+table {
+    border-collapse: collapse;
+    margin: 12px 0;
+    width: 100%;
+    background: var(--card-bg);
+}
+
+th,
+td {
+    border: 1px solid var(--border-color);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+}
+
+th {
+    background-color: var(--bg-color);
+    color: var(--primary-color);
+}
+
+.todo {
+    border: 2px dashed var(--secondary-color);
+    padding: 12px 16px;
+    margin-top: 12px;
+    border-radius: 5px;
+}
